@@ -1,0 +1,361 @@
+<section class="bg-white">
+  <div
+    class="container mx-auto px-6 py-8 md:py-12 flex flex-col md:flex-row items-center md:gap-x-12"
+  >
+    <div class="md:w-1/2 mb-12 md:mb-0">
+      <h1
+        class="text-4xl md:text-5xl font-bold text-gray-800 leading-tight mb-4"
+      >
+        Agendamento de consultas médicas simplificado
+      </h1>
+      <p class="text-xl text-gray-600 mb-8">
+        Agende consultas com facilidade, sem burocracia. Health Easy torna o
+        processo simples e rápido para pacientes e médicos.
+      </p>
+      <div
+        class="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4"
+      >
+        <a
+          routerLink="/login"
+          class="px-8 py-3 bg-blue-500 text-white text-lg font-medium rounded-lg hover:bg-blue-600 transition duration-300 text-center"
+        >
+          Agendar consulta
+        </a>
+        <a
+          routerLink="/cadastro"
+          class="px-8 py-3 border border-gray-300 text-gray-700 text-lg font-medium rounded-lg hover:bg-gray-50 transition duration-300 text-center"
+        >
+          Saiba mais
+        </a>
+      </div>
+    </div>
+
+    <div class="md:w-1/2 relative">
+      <canvas
+        #splineCanvas
+        class="w-full h-[570px] rounded-lg shadow-xl"
+      ></canvas>
+
+      <div
+        class="absolute bottom-5 right-10 bg-white text-blue-600 font-semibold px-4 py-2 rounded-xl shadow-md text-sm transform scale-x-[1.4] scale-y-[1.2]"
+      >
+        HealthEasy
+      </div>
+    </div>
+  </div>
+</section>
+
+<app-home-features />
+
+<section class="py-16 bg-white">
+  <div class="container mx-auto px-6">
+    <div class="text-center mb-16">
+      <h2 class="text-3xl font-bold text-gray-800 mb-4">
+        Encontre o médico ideal
+      </h2>
+      <p class="text-xl text-gray-600 max-w-2xl mx-auto">
+        Acesso a profissionais qualificados em diversas especialidades
+      </p>
+    </div>
+
+    <div class="grid md:grid-cols-3 gap-8">
+      <div
+        class="bg-white rounded-xl overflow-hidden shadow-lg border border-gray-100"
+      >
+        <div class="h-48 bg-blue-50 flex items-center justify-center">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-24 w-24 text-blue-500"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+            />
+          </svg>
+        </div>
+        <div class="p-6">
+          <h3 class="text-xl font-bold text-gray-800 mb-1">
+            Dra. Neiandria Melo
+          </h3>
+          <p class="text-blue-500 mb-3">Cardiologista</p>
+          <p class="text-gray-600 mb-4">CRM-SP 123456</p>
+          <a
+            href="#"
+            class="text-blue-500 font-medium hover:text-blue-600 transition duration-300 inline-flex items-center"
+          >
+            Ver disponibilidade
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-4 w-4 ml-1"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M9 5l7 7-7 7"
+              />
+            </svg>
+          </a>
+        </div>
+      </div>
+
+      <div
+        class="bg-white rounded-xl overflow-hidden shadow-lg border border-gray-100"
+      >
+        <div class="h-48 bg-blue-50 flex items-center justify-center">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-24 w-24 text-blue-500"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+            />
+          </svg>
+        </div>
+        <div class="p-6">
+          <h3 class="text-xl font-bold text-gray-800 mb-1">Dr. Ruan Araujo</h3>
+          <p class="text-blue-500 mb-3">Ortopedista</p>
+          <p class="text-gray-600 mb-4">CRM-SP 789012</p>
+          <a
+            href="#"
+            class="text-blue-500 font-medium hover:text-blue-600 transition duration-300 inline-flex items-center"
+          >
+            Ver disponibilidade
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-4 w-4 ml-1"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M9 5l7 7-7 7"
+              />
+            </svg>
+          </a>
+        </div>
+      </div>
+
+      <div
+        class="bg-white rounded-xl overflow-hidden shadow-lg border border-gray-100"
+      >
+        <div class="h-48 bg-blue-50 flex items-center justify-center">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-24 w-24 text-blue-500"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+            />
+          </svg>
+        </div>
+        <div class="p-6">
+          <h3 class="text-xl font-bold text-gray-800 mb-1">
+            Dra. Luanna Karenna
+          </h3>
+          <p class="text-blue-500 mb-3">Pediatra</p>
+          <p class="text-gray-600 mb-4">CRM-SP 345678</p>
+          <a
+            href="#"
+            class="text-blue-500 font-medium hover:text-blue-600 transition duration-300 inline-flex items-center"
+          >
+            Ver disponibilidade
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-4 w-4 ml-1"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M9 5l7 7-7 7"
+              />
+            </svg>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <div class="text-center mt-12">
+      <a
+        href="#"
+        class="px-6 py-3 border border-blue-500 text-blue-500 font-medium rounded-lg hover:bg-blue-50 transition duration-300 inline-flex items-center"
+      >
+        Ver todos os médicos
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="h-5 w-5 ml-2"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M19 9l-7 7-7-7"
+          />
+        </svg>
+      </a>
+    </div>
+  </div>
+</section>
+
+<section class="py-16 bg-gray-50">
+  <div class="container mx-auto px-6">
+    <div class="text-center mb-16">
+      <h2 class="text-3xl font-bold text-gray-800 mb-4">
+        O que nossos pacientes dizem
+      </h2>
+      <p class="text-xl text-gray-600 max-w-2xl mx-auto">
+        Depoimentos de quem já experimentou a facilidade do Health Easy
+      </p>
+    </div>
+
+    <div class="grid md:grid-cols-3 gap-8">
+      <div class="bg-white p-8 rounded-xl shadow-sm">
+        <div class="flex items-center mb-4">
+          <div class="flex-shrink-0">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-10 w-10 text-blue-500"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+              />
+            </svg>
+          </div>
+          <div class="ml-4">
+            <h4 class="text-lg font-semibold text-gray-800">Mário Netto</h4>
+            <p class="text-gray-500">Paciente</p>
+          </div>
+        </div>
+        <p class="text-gray-600">
+          "Finalmente um sistema que funciona! Agendei minha consulta em poucos
+          minutos, sem precisar ligar para a clínica. O lembrete por SMS foi
+          muito útil."
+        </p>
+      </div>
+
+      <div class="bg-white p-8 rounded-xl shadow-sm">
+        <div class="flex items-center mb-4">
+          <div class="flex-shrink-0">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-10 w-10 text-blue-500"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+              />
+            </svg>
+          </div>
+          <div class="ml-4">
+            <h4 class="text-lg font-semibold text-gray-800">Marcos Oliveira</h4>
+            <p class="text-gray-500">Paciente</p>
+          </div>
+        </div>
+        <p class="text-gray-600">
+          "Como pessoa ocupada, valorizo muito poder agendar consultas fora do
+          horário comercial. A interface é intuitiva e o processo é muito
+          rápido."
+        </p>
+      </div>
+
+      <div class="bg-white p-8 rounded-xl shadow-sm">
+        <div class="flex items-center mb-4">
+          <div class="flex-shrink-0">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-10 w-10 text-blue-500"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+              />
+            </svg>
+          </div>
+          <div class="ml-4">
+            <h4 class="text-lg font-semibold text-gray-800">
+              Dra. Juliana Costa
+            </h4>
+            <p class="text-gray-500">Médica</p>
+          </div>
+        </div>
+        <p class="text-gray-600">
+          "Como médica, o Health Easy me ajudou a reduzir significativamente as
+          faltas de pacientes. A gestão da agenda ficou muito mais eficiente."
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="py-16 bg-blue-500 text-white">
+  <div class="container mx-auto px-6 text-center">
+    <h2 class="text-3xl font-bold mb-6">
+      Pronto para simplificar seu agendamento médico?
+    </h2>
+    <p class="text-xl mb-8 max-w-2xl mx-auto">
+      Cadastre-se agora e experimente a forma mais fácil de agendar consultas
+    </p>
+    <div
+      class="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-4"
+    >
+      <a
+        routerLink="/cadastro"
+        class="px-8 py-3 bg-white text-blue-500 text-lg font-medium rounded-lg hover:bg-gray-100 transition duration-300"
+      >
+        Começar agora
+      </a>
+      <a
+        href="#"
+        class="px-8 py-3 border border-white text-white text-lg font-medium rounded-lg hover:bg-blue-600 transition duration-300"
+      >
+        Falar com um consultor
+      </a>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,284 @@
+<div class="min-h-screen bg-gradient-to-b from-blue-50 to-white p-8">
+  <div class="max-w-4xl mx-auto bg-white rounded-3xl shadow-xl p-10">
+    <h2 class="text-4xl font-extrabold text-blue-800 mb-8">
+      Agendar Consulta
+      <span *ngIf="selectedPaciente" class="block text-lg text-gray-600 mt-1">
+        Paciente: {{ selectedPaciente.nome }}
+      </span>
+    </h2>
+
+    <div class="relative flex items-center justify-between mb-10">
+      <ng-container *ngFor="let lbl of getStepLabels(); let i = index">
+        <div class="flex flex-col items-center flex-1">
+          <div
+            class="w-10 h-10 rounded-full flex items-center justify-center z-10 mb-2 text-white font-semibold shadow-md transition-colors duration-300"
+            [ngClass]="step >= i + 1 ? 'bg-sky-600' : 'bg-gray-300'"
+          >
+            {{ i + 1 }}
+          </div>
+          <div
+            class="text-xs text-center font-medium transition-colors duration-300"
+            [ngClass]="step === i + 1 ? 'text-sky-700' : 'text-gray-500'"
+          >
+            {{ lbl }}
+          </div>
+        </div>
+        <div
+          *ngIf="i < getStepLabels().length - 1"
+          class="absolute top-5 left-[calc((100%/(getStepLabels().length-1))*i+5%)] w-[calc(100%/(getStepLabels().length))] h-1 rounded-full transition-colors duration-300"
+          [ngClass]="step > i + 1 ? 'bg-sky-600' : 'bg-gray-200'"
+        ></div>
+      </ng-container>
+    </div>
+
+    <div [ngSwitch]="step" class="space-y-6">
+      <div *ngSwitchCase="1">
+        <label class="text-sm font-medium text-gray-700 mb-2 block"
+          >Selecione o Paciente</label
+        >
+        <select
+          [(ngModel)]="selectedPaciente"
+          class="w-full border border-gray-300 rounded-xl px-4 py-3 shadow-sm focus:ring-2 focus:ring-sky-300 focus:border-sky-500 transition"
+        >
+          <option [ngValue]="null" disabled>-- Selecione --</option>
+          <option *ngFor="let p of pacientes" [ngValue]="p">
+            {{ p.nome }}
+          </option>
+        </select>
+        <div class="flex justify-end mt-4">
+          <button
+            (click)="nextStep()"
+            [disabled]="!selectedPaciente"
+            class="bg-sky-600 text-white font-semibold py-3 px-6 rounded-xl shadow-md hover:bg-sky-700 focus:outline-none focus:ring-2 focus:ring-sky-400 transition disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            Próximo
+          </button>
+        </div>
+      </div>
+
+      <div *ngSwitchCase="2">
+        <label class="text-sm font-medium text-gray-700 mb-2 block"
+          >Selecione a Especialidade</label
+        >
+        <select
+          [(ngModel)]="selectedSpecialty"
+          (change)="onSelectSpecialty()"
+          class="w-full border border-gray-300 rounded-xl px-4 py-3 shadow-sm focus:ring-2 focus:ring-sky-300 focus:border-sky-500 transition"
+        >
+          <option [ngValue]="null" disabled>-- Selecione --</option>
+          <option *ngFor="let esp of specialties" [ngValue]="esp">
+            {{ esp }}
+          </option>
+        </select>
+        <div class="flex justify-between mt-4">
+          <button
+            (click)="prevStep()"
+            class="bg-transparent border border-gray-400 text-gray-700 font-semibold py-3 px-6 rounded-xl hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-sky-300 transition"
+          >
+            Voltar
+          </button>
+          <button
+            (click)="nextStep()"
+            [disabled]="!selectedSpecialty"
+            class="bg-sky-600 text-white font-semibold py-3 px-6 rounded-xl shadow-md hover:bg-sky-700 focus:outline-none focus:ring-2 focus:ring-sky-400 transition disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            Próximo
+          </button>
+        </div>
+      </div>
+
+      <div *ngSwitchCase="3">
+        <label class="text-sm font-medium text-gray-700 mb-2 block"
+          >Selecione o Médico</label
+        >
+        <select
+          [(ngModel)]="selectedDoctorId"
+          class="w-full border border-gray-300 rounded-xl px-4 py-3 shadow-sm focus:ring-2 focus:ring-sky-300 focus:border-sky-500 transition"
+        >
+          <option [ngValue]="null" disabled>-- Selecione --</option>
+          <option *ngFor="let d of doctors" [ngValue]="d.id_medico">
+            {{ d.nome }}
+          </option>
+        </select>
+        <div class="flex justify-between mt-4">
+          <button
+            (click)="prevStep()"
+            class="bg-transparent border border-gray-400 text-gray-700 font-semibold py-3 px-6 rounded-xl hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-sky-300 transition"
+          >
+            Voltar
+          </button>
+          <button
+            (click)="nextStep()"
+            [disabled]="!selectedDoctorId"
+            class="bg-sky-600 text-white font-semibold py-3 px-6 rounded-xl shadow-md hover:bg-sky-700 focus:outline-none focus:ring-2 focus:ring-sky-400 transition disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            Próximo
+          </button>
+        </div>
+      </div>
+
+      <div *ngSwitchCase="4">
+        <label class="text-sm font-medium text-gray-700 mb-2 block"
+          >Selecione a Data</label
+        >
+        <div
+          class="grid grid-cols-7 text-xs font-semibold text-gray-500 mb-2 select-none"
+        >
+          <div *ngFor="let wd of weekDays" class="text-center">{{ wd }}</div>
+        </div>
+        <div class="grid grid-cols-7 gap-1 mb-4">
+          <button
+            *ngFor="let day of calendarDays"
+            (click)="selectDate(day.date)"
+            [disabled]="!day.currentMonth"
+            class="w-10 h-10 rounded-full transition-colors duration-200 focus:outline-none"
+            [ngClass]="{
+              'bg-sky-600 text-white shadow': isSelected(day.date),
+              'hover:bg-sky-100': day.currentMonth && !isSelected(day.date),
+              'text-gray-400': !day.currentMonth,
+              'cursor-not-allowed': !day.currentMonth
+            }"
+          >
+            {{ day.date.getDate() }}
+          </button>
+        </div>
+        <div class="flex justify-between mb-4">
+          <button
+            (click)="prevMonth()"
+            class="bg-transparent border border-gray-400 text-gray-700 font-semibold py-2 px-4 rounded-xl hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-sky-300 transition"
+          >
+            &lt; Mês Anterior
+          </button>
+          <button
+            (click)="nextMonth()"
+            class="bg-transparent border border-gray-400 text-gray-700 font-semibold py-2 px-4 rounded-xl hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-sky-300 transition"
+          >
+            Próximo Mês &gt;
+          </button>
+        </div>
+        <div class="flex justify-between">
+          <button
+            (click)="prevStep()"
+            class="bg-transparent border border-gray-400 text-gray-700 font-semibold py-3 px-6 rounded-xl hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-sky-300 transition"
+          >
+            Voltar
+          </button>
+          <button
+            (click)="nextStep()"
+            [disabled]="!selectedDate"
+            class="bg-sky-600 text-white font-semibold py-3 px-6 rounded-xl shadow-md hover:bg-sky-700 focus:outline-none focus:ring-2 focus:ring-sky-400 transition disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            Próximo
+          </button>
+        </div>
+      </div>
+
+      <div *ngSwitchCase="5">
+        <label class="text-sm font-medium text-gray-700 mb-2 block"
+          >Selecione o Horário</label
+        >
+        <div class="grid grid-cols-3 gap-3 mb-4">
+          <button
+            *ngFor="let t of times"
+            (click)="selectTime(t)"
+            [disabled]="!isTimeAvailable(t)"
+            class="py-3 rounded-xl transition-colors duration-200 focus:outline-none"
+            [ngClass]="{
+              'bg-sky-600 text-white shadow-md': t === selectedTime,
+              'bg-gray-100 hover:bg-sky-100 cursor-pointer':
+                isTimeAvailable(t) && t !== selectedTime,
+              'bg-gray-200 text-gray-400 cursor-not-allowed':
+                !isTimeAvailable(t)
+            }"
+          >
+            {{ t }}
+          </button>
+        </div>
+        <div class="flex justify-between">
+          <button
+            (click)="prevStep()"
+            class="bg-transparent border border-gray-400 text-gray-700 font-semibold py-3 px-6 rounded-xl hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-sky-300 transition"
+          >
+            Voltar
+          </button>
+          <button
+            (click)="nextStep()"
+            [disabled]="!selectedTime"
+            class="bg-sky-600 text-white font-semibold py-3 px-6 rounded-xl shadow-md hover:bg-sky-700 focus:outline-none focus:ring-2 focus:ring-sky-400 transition disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            Próximo
+          </button>
+        </div>
+      </div>
+
+      <div *ngSwitchCase="6">
+        <h3 class="text-lg font-semibold mb-4">Resumo da Consulta</h3>
+        <div class="space-y-2 text-gray-800">
+          <p><strong>Paciente:</strong> {{ selectedPaciente.nome }}</p>
+          <p><strong>Especialidade:</strong> {{ selectedSpecialty }}</p>
+          <p><strong>Dr(a).:</strong> {{ getDoctorName() }}</p>
+          <p><strong>Data:</strong> {{ selectedDate | date : "dd/MM/yyyy" }}</p>
+          <p><strong>Horário:</strong> {{ selectedTime }}</p>
+        </div>
+        <div class="flex justify-between mt-6">
+          <button
+            (click)="prevStep()"
+            class="bg-transparent border border-gray-400 text-gray-700 font-semibold py-3 px-6 rounded-xl hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-sky-300 transition"
+          >
+            Voltar
+          </button>
+          <button
+            (click)="confirmarAgendamento()"
+            class="bg-green-600 text-white font-semibold py-3 px-6 rounded-xl shadow-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-400 transition"
+          >
+            Confirmar
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div
+    *ngIf="showConfirmation"
+    class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50 animate-fadeIn"
+  >
+    <div
+      class="bg-white rounded-2xl shadow-xl max-w-md w-full p-8 text-center relative animate-scaleUp"
+    >
+      <div
+        class="mx-auto mb-4 w-20 h-20 rounded-full bg-green-100 flex items-center justify-center"
+      >
+        <svg
+          class="w-12 h-12 text-green-600"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="3"
+          viewBox="0 0 24 24"
+          xmlns="http://www.w3.org/2000/svg"
+          aria-hidden="true"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M5 13l4 4L19 7"
+          ></path>
+        </svg>
+      </div>
+      <h2 class="text-2xl font-bold text-green-700 mb-2">
+        Agendamento Confirmado!
+      </h2>
+      <p class="text-gray-700 mb-6">
+        A consulta foi agendada com sucesso para
+        <strong>{{ selectedDate | date : "dd/MM/yyyy" }}</strong> às
+        <strong>{{ selectedTime }}</strong
+        >.
+      </p>
+      <button
+        (click)="voltarDashboard()"
+        class="bg-green-600 hover:bg-green-700 text-white font-semibold py-3 px-6 rounded-xl shadow-md focus:outline-none focus:ring-2 focus:ring-green-400 transition"
+      >
+        Voltar ao Dashboard
+      </button>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,76 @@
+<div
+  class="fixed inset-0 bg-black bg-opacity-30 flex items-center justify-center z-50"
+>
+  <div class="bg-white rounded-xl shadow-lg max-w-md w-full p-6">
+    <h3 class="text-xl font-semibold mb-4">Reagendar Consulta</h3>
+
+    <div class="mb-4">
+      <div class="flex justify-between items-center mb-2">
+        <button (click)="prevMonth()" class="px-2 py-1 hover:underline">
+          &lt;
+        </button>
+        <span class="font-medium">
+          {{ selectedDate | date : "MMMM yyyy" : "" : "pt-BR" }}
+        </span>
+
+        <button (click)="nextMonth()" class="px-2 py-1 hover:underline">
+          &gt;
+        </button>
+      </div>
+      <div class="grid grid-cols-7 text-center text-sm text-gray-600 mb-2">
+        <div *ngFor="let wd of weekDays">{{ wd }}</div>
+      </div>
+      <div class="grid grid-cols-7 gap-1 mb-4">
+        <button
+          *ngFor="let day of calendarDays"
+          (click)="selectDate(day.date)"
+          [disabled]="!day.currentMonth"
+          class="w-8 h-8 rounded-full transition"
+          [ngClass]="{
+            'bg-blue-600 text-white': isSelected(day.date),
+            'hover:bg-blue-100': day.currentMonth && !isSelected(day.date),
+            'text-gray-400': !day.currentMonth
+          }"
+        >
+          {{ day.date.getDate() }}
+        </button>
+      </div>
+    </div>
+
+    <div class="mb-6">
+      <label class="block mb-1 font-medium">Escolha o Horário</label>
+      <div class="grid grid-cols-3 gap-2">
+        <button
+          *ngFor="let t of times"
+          (click)="selectTime(t)"
+          [disabled]="!isTimeAvailable(t)"
+          class="py-2 rounded-lg transition"
+          [ngClass]="{
+            'bg-blue-600 text-white': t === selectedTime,
+            'bg-gray-100 hover:bg-blue-100':
+              isTimeAvailable(t) && t !== selectedTime,
+            'bg-gray-200 text-gray-400 cursor-not-allowed': !isTimeAvailable(t)
+          }"
+        >
+          {{ t }}
+        </button>
+      </div>
+    </div>
+
+    <div class="flex justify-end space-x-2">
+      <button
+        (click)="cancel()"
+        class="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400"
+      >
+        Cancelar
+      </button>
+      <button
+        (click)="confirm()"
+        [disabled]="!selectedTime"
+        class="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 disabled:opacity-50"
+      >
+        Confirmar
+      </button>
+    </div>
+  </div>
+</div>

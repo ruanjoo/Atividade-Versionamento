@@ -1,0 +1,169 @@
+<div class="p-6 bg-gradient-to-b from-blue-50 to-white min-h-screen">
+  <div class="flex justify-between items-center mb-8">
+    <h2 class="text-5xl font-extrabold text-blue-800">
+      Olá, {{ paciente?.nome }}
+    </h2>
+    <button
+      (click)="novoAgendamento()"
+      class="inline-flex items-center space-x-2 bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded-full shadow-lg transition"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        class="h-5 w-5"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M12 4v16m8-8H4"
+        />
+      </svg>
+      <span>Nova Consulta</span>
+    </button>
+  </div>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">
+    <div
+      class="bg-white p-6 rounded-2xl shadow-md hover:shadow-lg transition-shadow"
+    >
+      <h3 class="text-xl font-semibold text-gray-800 mb-4">Próxima Consulta</h3>
+      <ng-container *ngIf="proximaConsulta; else semProxima">
+        <p class="mb-2">
+          <strong>Médico:</strong> {{ proximaConsulta.medico.nome }}
+        </p>
+        <p class="mb-2">
+          <strong>Especialidade:</strong>
+          {{ proximaConsulta.medico.especialidade }}
+        </p>
+        <p class="mb-2">
+          <strong>Data:</strong>
+          {{ proximaConsulta.consulta.data_consulta | date : "dd/MM/yyyy" }}
+          às {{ proximaConsulta.consulta.data_consulta | date : "shortTime" }}
+        </p>
+        <p>
+          <strong>Status:</strong>
+          <span
+            [ngClass]="{
+              'bg-green-100 text-green-800':
+                proximaConsulta.consulta.status === 'agendada',
+              'bg-yellow-100 text-yellow-800':
+                proximaConsulta.consulta.status === 'em andamento',
+              'bg-blue-100 text-blue-800':
+                proximaConsulta.consulta.status === 'realizada',
+              'bg-red-100 text-red-800':
+                proximaConsulta.consulta.status === 'cancelada'
+            }"
+            class="inline-block px-2 py-1 rounded-full text-sm font-medium"
+          >
+            {{ proximaConsulta.consulta.status | titlecase }}
+          </span>
+        </p>
+      </ng-container>
+      <ng-template #semProxima>
+        <p class="text-gray-500 italic">Você não tem consultas agendadas.</p>
+      </ng-template>
+    </div>
+
+    <div
+      class="bg-white p-6 rounded-2xl shadow-md hover:shadow-lg transition-shadow"
+    >
+      <h3 class="text-xl font-semibold text-gray-800 mb-4">Lembrete</h3>
+      <ng-container *ngIf="proximaConsulta; else semLembrete">
+        <p>A consulta com</p>
+        <p class="font-medium mb-1">Dr(a). {{ proximaConsulta.medico.nome }}</p>
+        <p>foi confirmada e faltam</p>
+        <p class="font-extrabold text-2xl text-blue-600">
+          {{ diasParaProxima }} dias
+        </p>
+      </ng-container>
+      <ng-template #semLembrete>
+        <p class="text-gray-500 italic">Sem lembretes no momento.</p>
+      </ng-template>
+    </div>
+  </div>
+
+  <div
+    class="bg-white p-6 rounded-2xl shadow-md hover:shadow-lg transition-shadow"
+  >
+    <h3 class="text-2xl font-semibold text-gray-800 mb-6">Minhas Consultas</h3>
+    <ng-container *ngIf="minhasConsultas.length > 0; else semConsultas">
+      <div class="overflow-auto">
+        <table class="w-full text-sm text-left">
+          <thead class="bg-gray-100">
+            <tr class="text-gray-600">
+              <th class="py-3 px-4">Médico</th>
+              <th>Especialidade</th>
+              <th>Data</th>
+              <th>Horário</th>
+              <th>Status</th>
+              <th class="text-right">Ações</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr
+              *ngFor="let item of minhasConsultas"
+              class="border-b hover:bg-gray-50 transition-colors"
+            >
+              <td class="py-3 px-4">{{ item.medico.nome }}</td>
+              <td>{{ item.medico.especialidade }}</td>
+              <td>{{ item.consulta.data_consulta | date : "dd/MM/yyyy" }}</td>
+              <td>{{ item.consulta.data_consulta | date : "shortTime" }}</td>
+              <td>
+                <span
+                  [ngClass]="{
+                    'bg-green-100 text-green-800':
+                      item.consulta.status === 'agendada',
+                    'bg-yellow-100 text-yellow-800':
+                      item.consulta.status === 'em andamento',
+                    'bg-green-100 text-blue-800':
+                      item.consulta.status === 'realizada',
+                    'bg-red-100 text-red-800':
+                      item.consulta.status === 'cancelada'
+                  }"
+                  class="inline-block px-2 py-1 rounded-full text-xs font-medium"
+                >
+                  {{ item.consulta.status | titlecase }}
+                </span>
+              </td>
+              <td class="text-right space-x-4">
+                <button
+                  class="text-yellow-600 hover:text-yellow-800 transition"
+                  (click)="abrirReagendar(item.consulta)"
+                >
+                  Reagendar
+                </button>
+                <button
+                  class="text-red-600 hover:text-red-800 transition"
+                  (click)="cancelar(item.consulta)"
+                >
+                  Cancelar
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </ng-container>
+    <ng-template #semConsultas>
+      <p class="text-gray-500 italic text-center">
+        Você não tem consultas agendadas.
+      </p>
+    </ng-template>
+  </div>
+
+  <div
+    *ngIf="consultaParaReagendar"
+    class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
+  >
+    <div class="bg-white p-6 rounded-2xl shadow-2xl max-w-md w-full">
+      <app-reagendar-consulta
+        [consultaOriginal]="consultaParaReagendar"
+        (done)="onReagendado()"
+        (canceled)="consultaParaReagendar = null"
+      ></app-reagendar-consulta>
+    </div>
+  </div>
+</div>

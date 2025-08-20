@@ -1,0 +1,217 @@
+<div
+  class="p-8 bg-gradient-to-br from-blue-50 via-white to-blue-50 min-h-screen font-sans"
+>
+  <h2
+    class="text-3xl font-extrabold text-blue-900 mb-8 tracking-wide drop-shadow-md"
+  >
+    GERENCIAMENTO DE PACIENTES
+  </h2>
+
+  <div
+    class="flex flex-col md:flex-row md:items-center md:justify-between mb-6 gap-4"
+  >
+    <button
+      (click)="toggleNewForm()"
+      class="bg-green-600 hover:bg-green-700 text-white font-semibold px-5 py-3 rounded-lg shadow-md transition-transform active:scale-95"
+      aria-label="Adicionar novo paciente"
+    >
+      + Novo Paciente
+    </button>
+
+    <input
+      type="text"
+      placeholder="Buscar por nome ou CPF"
+      [(ngModel)]="searchTerm"
+      class="border border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-300 rounded-lg p-3 w-full md:w-1/3 text-gray-700 placeholder-gray-400 transition"
+      aria-label="Campo de busca por nome ou CPF"
+    />
+  </div>
+
+  <div
+    *ngIf="showNewForm"
+    class="bg-white p-6 rounded-2xl shadow-xl max-w-4xl mx-auto mb-10 border border-gray-200"
+  >
+    <h3 class="text-2xl font-semibold mb-5 text-blue-800 border-b pb-2">
+      Cadastrar Novo Paciente
+    </h3>
+    <form (submit)="$event.preventDefault(); addPaciente()">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <input
+          [(ngModel)]="newPaciente.nome"
+          name="nome"
+          placeholder="Nome completo"
+          required
+          class="border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
+        />
+        <input
+          [(ngModel)]="newPaciente.email"
+          name="email"
+          type="email"
+          placeholder="Email"
+          required
+          class="border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
+        />
+        <input
+          [(ngModel)]="newPaciente.telefone"
+          name="telefone"
+          placeholder="Telefone"
+          required
+          class="border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
+        />
+        <input
+          [(ngModel)]="newPaciente.CPF"
+          name="cpf"
+          placeholder="CPF"
+          required
+          class="border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
+        />
+        <input
+          type="date"
+          [(ngModel)]="newPaciente.data_nascimento"
+          name="data_nascimento"
+          required
+          class="border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
+        />
+        <select
+          [(ngModel)]="newPaciente.sexo"
+          name="sexo"
+          class="border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
+          required
+        >
+          <option value="" disabled selected>Sexo</option>
+          <option value="Masculino">Masculino</option>
+          <option value="Feminino">Feminino</option>
+          <option value="Outro">Outro</option>
+        </select>
+      </div>
+      <button
+        type="submit"
+        class="mt-6 bg-blue-700 hover:bg-blue-800 text-white font-bold px-6 py-3 rounded-lg shadow-lg transition-transform active:scale-95"
+      >
+        Salvar Paciente
+      </button>
+    </form>
+  </div>
+
+  <div
+    class="overflow-x-auto rounded-lg shadow-lg border border-gray-200 bg-white max-w-full mx-auto"
+  >
+    <table class="min-w-full table-auto text-left">
+      <thead class="bg-blue-100 text-blue-800 font-semibold">
+        <tr>
+          <th class="py-3 px-5 border-r border-blue-200">Nome</th>
+          <th class="py-3 px-5 border-r border-blue-200">Email</th>
+          <th class="py-3 px-5 border-r border-blue-200">Telefone</th>
+          <th class="py-3 px-5 border-r border-blue-200">CPF</th>
+          <th class="py-3 px-5 border-r border-blue-200">Última Consulta</th>
+          <th class="py-3 px-5 text-right">Ações</th>
+        </tr>
+      </thead>
+      <tbody class="text-gray-700">
+        <tr
+          *ngFor="let p of filteredPacientes"
+          class="hover:bg-blue-50 transition cursor-pointer"
+        >
+          <td class="py-4 px-5 border-b border-gray-200">{{ p.nome }}</td>
+          <td class="py-4 px-5 border-b border-gray-200">{{ p.email }}</td>
+          <td class="py-4 px-5 border-b border-gray-200">{{ p.telefone }}</td>
+          <td class="py-4 px-5 border-b border-gray-200">{{ p.CPF }}</td>
+          <td class="py-4 px-5 border-b border-gray-200">
+            {{
+              getUltimaConsulta(p)
+                ? (getUltimaConsulta(p) | date : "dd/MM/yyyy")
+                : "—"
+            }}
+          </td>
+          <td class="py-4 px-5 border-b border-gray-200 text-right space-x-3">
+            <button
+              (click)="viewHistory(p)"
+              class="text-blue-600 font-semibold hover:underline focus:outline-none focus:ring-2 focus:ring-blue-400 rounded"
+              [attr.aria-label]="'Ver histórico do paciente ' + p.nome"
+            >
+              Ver Histórico
+            </button>
+            <button
+              disabled
+              class="text-green-600 opacity-50 cursor-not-allowed font-semibold"
+              aria-label="Agendar consulta (desabilitado)"
+            >
+              Agendar
+            </button>
+          </td>
+        </tr>
+        <tr *ngIf="filteredPacientes.length === 0">
+          <td colspan="6" class="text-center py-6 text-gray-500 italic">
+            Nenhum paciente encontrado.
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div
+    *ngIf="showHistoryModal"
+    class="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50 px-4"
+    role="dialog"
+    aria-modal="true"
+  >
+    <div
+      class="bg-white rounded-3xl shadow-2xl max-w-4xl w-full max-h-[80vh] overflow-y-auto p-8 relative"
+    >
+      <h3 class="text-2xl font-bold mb-6 text-blue-900 border-b pb-3">
+        Histórico de Consultas
+      </h3>
+
+      <table
+        class="min-w-full table-auto text-left border-collapse border border-gray-300"
+      >
+        <thead class="bg-blue-50 text-blue-700 font-semibold">
+          <tr>
+            <th class="py-3 px-4 border border-gray-300">ID Consulta</th>
+            <th class="py-3 px-4 border border-gray-300">Data / Horário</th>
+            <th class="py-3 px-4 border border-gray-300">Médico</th>
+            <th class="py-3 px-4 border border-gray-300">Especialidade</th>
+            <th class="py-3 px-4 border border-gray-300">Status</th>
+          </tr>
+        </thead>
+        <tbody class="text-gray-700">
+          <tr
+            *ngFor="let h of historyList"
+            class="border-b border-gray-300 hover:bg-blue-50 transition"
+          >
+            <td class="py-3 px-4 border border-gray-300">
+              {{ h.id_consulta }}
+            </td>
+            <td class="py-3 px-4 border border-gray-300">
+              {{ h.data_consulta | date : "dd/MM/yyyy HH:mm" }}
+            </td>
+            <td class="py-3 px-4 border border-gray-300">
+              {{ h.medico_nome || "—" }}
+            </td>
+            <td class="py-3 px-4 border border-gray-300">
+              {{ h.especialidade || "—" }}
+            </td>
+            <td
+              class="py-3 px-4 border border-gray-300 font-semibold text-indigo-600"
+            >
+              {{ h.status }}
+            </td>
+          </tr>
+          <tr *ngIf="historyList.length === 0">
+            <td colspan="5" class="text-center py-6 text-gray-500 italic">
+              Nenhum histórico disponível.
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <button
+        (click)="closeHistory()"
+        class="mt-6 bg-red-600 hover:bg-red-700 text-white px-6 py-3 rounded-lg shadow-md transition active:scale-95 absolute right-8 bottom-8"
+        aria-label="Fechar histórico"
+      >
+        Fechar
+      </button>
+    </div>
+  </div>
+</div>

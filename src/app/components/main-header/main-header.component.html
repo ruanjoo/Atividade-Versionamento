@@ -1,0 +1,77 @@
+<header class="bg-white shadow-sm">
+  <div class="container mx-auto px-6 py-4 flex justify-between items-center">
+    <div class="flex items-center cursor-pointer" routerLink="/">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        class="h-8 w-8 text-blue-500"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"
+        />
+      </svg>
+      <span class="ml-2 text-xl font-bold text-blue-600">Health Easy</span>
+    </div>
+
+    <nav class="flex items-center space-x-4">
+      <ng-container *ngIf="!currentUser; else loggedIn">
+        <a
+          routerLink="/login"
+          class="px-4 py-2 border border-blue-500 text-blue-500 rounded-lg hover:bg-blue-50 transition duration-300"
+        >
+          Entrar
+        </a>
+        <a
+          routerLink="/cadastro"
+          class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition duration-300"
+        >
+          Cadastrar
+        </a>
+      </ng-container>
+
+      <ng-template #loggedIn>
+        <div class="relative">
+          <button
+            (click)="toggleDropdown()"
+            class="flex items-center space-x-2 focus:outline-none"
+          >
+            <div
+              class="w-8 h-8 rounded-full bg-blue-500 flex items-center justify-center text-white font-semibold"
+            >
+              {{
+                currentUser?.fullName ? currentUser?.fullName?.charAt(0) : "U"
+              }}
+            </div>
+            <span class="text-gray-700 font-medium">{{
+              currentUser?.fullName
+            }}</span>
+            <i class="fas fa-chevron-down text-gray-500"></i>
+          </button>
+
+          <div
+            *ngIf="dropdownOpen"
+            class="absolute right-0 mt-2 w-40 bg-white border rounded-lg shadow-lg z-10"
+          >
+            <button
+              (click)="irParaMinhaPagina()"
+              class="w-full text-left px-4 py-2 hover:bg-gray-100 transition font-medium"
+            >
+              Minha Página
+            </button>
+            <button
+              (click)="logout()"
+              class="w-full text-left px-4 py-2 hover:bg-gray-100 transition"
+            >
+              Sair
+            </button>
+          </div>
+        </div>
+      </ng-template>
+    </nav>
+  </div>
+</header>
